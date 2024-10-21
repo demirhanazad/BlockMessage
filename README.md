@@ -20,5 +20,6 @@ Writing language: Java
   <li><strong>Initial Owner Identification</strong>: The initial owner of this software is [ihmus](https://github.com/ihmus), and all developers acknowledge this fact.</li>
   <li><strong>Intellectual Property Rights</strong>: Users agree that the intellectual property rights of the software are protected for the benefit of the initial owners.</li>
   <li><strong>Development Rights</strong>: The initial owners have final approval authority over all changes and contributions made during the development of the software.</li>
+  <li><strong>Code Sharing Agreement</strong>: Developers and users agree that all code changes will be shared under the same terms and made available on this page.</li>
 </ol>
 
