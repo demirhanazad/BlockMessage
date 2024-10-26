@@ -1,13 +1,12 @@
 package app;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -22,33 +21,14 @@ public class Register extends JFrame {
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Register frame = new Register();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Register() {
+	public Register(ImageIcon image) {
 		setTitle("BlockMessage");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 335, 375);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		setIconImage(image.getImage());
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
 		

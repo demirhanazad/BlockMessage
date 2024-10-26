@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -22,33 +23,14 @@ public class Login extends JFrame {
 	private JPasswordField passwordField;
 	private static Azad blockmessage;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					blockmessage=new Azad();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Login() {
+	public Login(ImageIcon image) { //burası başlangıç fonksiyonu
+		blockmessage=new Azad(image);
 		setTitle("BlockMessage");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 335, 375);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		setIconImage(image.getImage());
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
 		

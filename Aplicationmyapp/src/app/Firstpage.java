@@ -5,6 +5,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -17,14 +20,14 @@ public class Firstpage extends JFrame {
     private JPanel contentPane;
     private static Login loginpage;
     private static Register registerpage;
-
+    private static ImageIcon image = new ImageIcon("logo.png");;
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
                     Firstpage frame = new Firstpage();
-                    loginpage = new Login();
-                    registerpage = new Register();
+                    loginpage = new Login(image);
+                    registerpage = new Register(image);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -40,7 +43,7 @@ public class Firstpage extends JFrame {
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(new GridLayout(1, 0, 0, 0));
-
+		setIconImage(image.getImage());
         JPanel panel = new JPanel();
         contentPane.add(panel);
         panel.setLayout(null);
