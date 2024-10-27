@@ -46,7 +46,7 @@ public class Register extends JFrame {
 		panel.add(passwordField);
 		
 		JButton btnNewButton = new JButton("Register");
-		btnNewButton.addActionListener(new ActionListener() {
+	    btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});

@@ -37,11 +37,13 @@ public class Firstpage extends JFrame {
     }
 
     public Firstpage() {
+    	setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 335, 375);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
+        setLocationRelativeTo(null);
         contentPane.setLayout(new GridLayout(1, 0, 0, 0));
 		setIconImage(image.getImage());
         JPanel panel = new JPanel();
@@ -55,6 +57,7 @@ public class Firstpage extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         if (loginpage != null) {
+                        	loginpage.setLocationRelativeTo(null);
                             loginpage.setVisible(true);
                             Firstpage.this.setVisible(false);
                         } else {
@@ -73,6 +76,7 @@ public class Firstpage extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         if (registerpage != null) {
+                        	registerpage.setLocationRelativeTo(null);
                             registerpage.setVisible(true);
                             Firstpage.this.setVisible(false);
                         } else {

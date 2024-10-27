@@ -1,40 +1,39 @@
 package app;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.ActionEvent;
-import java.awt.SystemColor;
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Font;
-import javax.swing.JTextPane;
-import javax.swing.JEditorPane;
-import javax.swing.JTextArea;
-import java.awt.Toolkit;
-import javax.swing.JScrollBar;
 
+import java.awt.*;
+import java.awt.event.*;
+/*
+ * @author ihmus
+ * 
+ * 
+ * P2P and coin transfer main interface
+ */
 public class Azad extends JFrame {
     private static final long serialVersionUID = 1L;
-    private JPanel contentPane;
-    private JLabel lblNewLabel;
-    private static ImageIcon image = new ImageIcon("logo.png");;
+    private static ImageIcon image;
+    private static String username = "Azad";
+    private final JSplitPane sp = new JSplitPane();
+    private final JPanel leftPanel = new JPanel(); // Panel to display all members
+    private final JPanel rightPanel = new JPanel(); // Panel with chat, message input and send button.
+    private JScrollPane chatScrollPane = null;
     private static transferframe transfer_frame;
-    public static void main(String[] args) {
+    private final JTextArea inputMessage = new JTextArea();
+    private final String PLACEHOLDER_TEXT = "Type your message here...";
+    private static JList<String> list = new JList<>(new String[]{"Han", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir"});
+    private final JPanel chatPanel = new JPanel(); // Chat messages are displayed here
+    private final JButton btnsendmessage = new JButton("Gönder");
+    private final JButton btnCoinGnder = new JButton("Coin Gönder");
+    
+    /*
+     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                	Azad frame = new Azad(image);
+                    image = new ImageIcon("logo.png");
+                    Azad frame = new Azad(image, username);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -42,62 +41,69 @@ public class Azad extends JFrame {
             }
         });
     }
+    */
+    public Azad(ImageIcon image, String username) {
+        // Placeholder text handling
+        inputMessage.setForeground(Color.gray);
+        inputMessage.setText(PLACEHOLDER_TEXT);
+        inputMessage.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (inputMessage.getText().equals(PLACEHOLDER_TEXT)) {
+                    inputMessage.setText("");
+                    inputMessage.setForeground(Color.black);
+                }
+            }
 
-    public Azad(ImageIcon image) {
-        setResizable(false);
-        setIconImage(image.getImage());
-        setBackground(new Color(128, 128, 128));
-        setTitle("P2P And Blockchain");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 937, 604);
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
-        contentPane.setLayout(new GridLayout(1, 0, 0, 0));
-        setLocationRelativeTo(null);
-        JPanel panel = new JPanel();
-        panel.setBackground(SystemColor.activeCaptionBorder);
-        contentPane.add(panel);
-        panel.setLayout(null);
-
-        lblNewLabel = new JLabel("Blockchain App");
-        lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 10));
-        lblNewLabel.setBackground(Color.WHITE);
-        lblNewLabel.setBounds(0, 0, 142, 19);
-        panel.add(lblNewLabel);
-
-        JButton btnNewButton = new JButton("Gönder");
-        btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 9));
-        btnNewButton.setBackground(new Color(192, 192, 192));
-        btnNewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (inputMessage.getText().isEmpty()) {
+                    inputMessage.setForeground(Color.gray);
+                    inputMessage.setText(PLACEHOLDER_TEXT);
+                }
             }
         });
-        btnNewButton.setBounds(837, 501, 76, 56);
-        panel.add(btnNewButton);
+        
+        init(image, username);
+    }
 
-        JEditorPane editorPane = new JEditorPane();
-        editorPane.setBackground(new Color(255, 255, 255));
-        editorPane.setBounds(289, 0, 624, 491);
-        panel.add(editorPane);
+    private void init(ImageIcon image, String username) {
+        setTitle(String.format("P2P And Blockchain, %s!", username));
+        setIconImage(image.getImage());
+        setBackground(new Color(128, 128, 128));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 937, 604);
+        setMinimumSize(new Dimension(800, 500));
+        setLocationRelativeTo(null);
 
-        JList<String> list = new JList<>(new String[] {"Han", "Demirhan", "Demir"});
+        // Configure JSplitPane
+        sp.setOneTouchExpandable(true);
+        sp.setDividerLocation(235);
+        sp.setLeftComponent(initializeLeftPanel(image));
+        sp.setRightComponent(initializeRightPanel(image));
+
+        add(sp);
+    }
+
+    private JScrollPane initializeLeftPanel(ImageIcon image) {
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        JScrollPane scrollpanel = new JScrollPane(leftPanel);
+        scrollpanel.setMinimumSize(new Dimension(200, 0)); // Same as initial divider location of the JSplitPane
+        scrollpanel.getVerticalScrollBar().setUnitIncrement(20);
         list.setBackground(new Color(128, 128, 128));
-        list.setBounds(0, 22, 283, 535);
-        panel.add(list);
-
+        list.setMaximumSize(new Dimension(Integer.MAX_VALUE, list.getPreferredSize().height)); // Maksimum genişliği ayarlayın
+        leftPanel.add(list);
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem menuItem1 = new JMenuItem("Coin Gönder");
         JMenuItem menuItem2 = new JMenuItem("Ara");
         popupMenu.add(menuItem1);
         popupMenu.add(menuItem2);
-
         list.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 if (e.isPopupTrigger()) {
                     int index = list.locationToIndex(e.getPoint());
-                    list.setSelectedIndex(index); 
-                    list.ensureIndexIsVisible(index); 
+                    list.setSelectedIndex(index);
+                    list.ensureIndexIsVisible(index);
                     popupMenu.show(list, e.getX(), e.getY());
                 }
             }
@@ -109,27 +115,49 @@ public class Azad extends JFrame {
                 }
             }
         });
-
-        JTextArea textArea = new JTextArea();
-        textArea.setBackground(new Color(192, 192, 192));
-        textArea.setBounds(387, 501, 431, 56);
-        panel.add(textArea);
-
+        
         menuItem1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	transfer_frame = new transferframe(image);
-            	transfer_frame.setLocation(Azad.this.getLocation().x, Azad.this.getLocation().y);
-            	transfer_frame.setVisible(true);
-                textArea.setText(list.getSelectedValue());
+                transfer_frame = new transferframe(image);
+                transfer_frame.setLocation(Azad.this.getLocation().x, Azad.this.getLocation().y);
+                transfer_frame.setVisible(true);
+                inputMessage.setText(list.getSelectedValue()+list.getSelectedIndex());
             }
         });
+        return scrollpanel;
+    }
 
-        JButton btnCoinGnder = new JButton("Coin Gönder");
+    private JPanel initializeRightPanel(ImageIcon image) {
+    	
+    	RelativeLayout rightPanelLayout = new RelativeLayout(RelativeLayout.Y_AXIS);
+        rightPanelLayout.setFill(true); // Fill components both horizontally AND vertically
+        rightPanel.setLayout(rightPanelLayout);
+        
+        JPanel topRight = new JPanel(new BorderLayout()); // Use BorderLayout so that messages can cover entire width (by adding to North)
+        chatPanel.setLayout(new BoxLayout(chatPanel, BoxLayout.Y_AXIS));
+        topRight.add(chatPanel, BorderLayout.NORTH);
+        chatScrollPane = new JScrollPane(topRight);
+        chatScrollPane.getVerticalScrollBar().setUnitIncrement(20); // Increase scroll speed
+        
+        rightPanel.add(chatScrollPane, 0.8f);
+        
+        RelativeLayout inputPanelLayout = new RelativeLayout();
+        inputPanelLayout.setFill(true);
+        JPanel inputPanel = new JPanel(inputPanelLayout);
+        
+        inputMessage.setLineWrap(true);
+        inputMessage.setMargin(new Insets(5, 5, 5, 5)); // Add a margin around the text area
+        inputMessage.setBackground(new Color(192, 192, 192));
+        inputPanel.add(btnCoinGnder);
+        inputPanel.add(new JScrollPane(inputMessage), 0.6f);
+        inputPanel.add(btnsendmessage, 0.2f);
+        
+        rightPanel.add(inputPanel, 0.2f);
         btnCoinGnder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textArea.setText("merhaba");
+                inputMessage.setText("merhaba");
                 transfer_frame = new transferframe(image);
                 int frameWidth = transfer_frame.getWidth();
                 int frameHeight = transfer_frame.getHeight();
@@ -139,13 +167,13 @@ public class Azad extends JFrame {
                 transfer_frame.setVisible(true);
             }
         });
-        btnCoinGnder.setFont(new Font("Tahoma", Font.PLAIN, 9));
-        btnCoinGnder.setBackground(new Color(192, 192, 192));
-        btnCoinGnder.setBounds(289, 501, 90, 56);
-        panel.add(btnCoinGnder);
-
-        JScrollBar scrollBar = new JScrollBar();
-        scrollBar.setBounds(816, 501, 17, 56);
-        panel.add(scrollBar);
+        btnsendmessage.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // action code
+            }
+        });
+        return rightPanel;
     }
+    
+    
 }

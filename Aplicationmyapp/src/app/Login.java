@@ -23,8 +23,9 @@ public class Login extends JFrame {
 	private JPasswordField passwordField;
 	private static Azad blockmessage;
 
-	public Login(ImageIcon image) { //burası başlangıç fonksiyonu
-		blockmessage=new Azad(image);
+	public Login(ImageIcon image) {
+		setResizable(false); //burası başlangıç fonksiyonu
+		blockmessage=new Azad(image,"azad");
 		setTitle("BlockMessage");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 335, 375);
@@ -48,25 +49,26 @@ public class Login extends JFrame {
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setBounds(28, 128, 45, 13);
+		JLabel lblNewLabel_1 = new JLabel("Username");
+		lblNewLabel_1.setBounds(28, 128, 63, 13);
 		panel.add(lblNewLabel_1);
 		
 		passwordField = new JPasswordField();
 		passwordField.setBounds(28, 210, 242, 19);
 		panel.add(passwordField);
 		
-		JLabel lblNewLabel_2 = new JLabel("New label");
+		JLabel lblNewLabel_2 = new JLabel("Password");
 		lblNewLabel_2.setBounds(28, 193, 45, 13);
 		panel.add(lblNewLabel_2);
 		
 		JButton btnNewButton = new JButton("Login");
 		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {
 			    if (textField.getText().equals("Azad")) {
 			        char[] password = passwordField.getPassword();
 			        String passwordStr = new String(password);
 			        if (passwordStr.equals("123")) {
+			        	blockmessage.setLocationRelativeTo(null);
 			            blockmessage.setVisible(true);
 			            Login.this.setVisible(false);
 			        } else {
