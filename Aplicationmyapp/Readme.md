@@ -1,0 +1,1 @@
+<h3>Blockchain tabanlı bu mesajlaşma ve kripto para uygulamasında Command Pattern tasarımm deseni kullanılmıştır . böylelikler kodun daha okunabilir olamsı sağlanmıştır.</h3>

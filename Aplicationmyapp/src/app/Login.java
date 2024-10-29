@@ -1,5 +1,6 @@
 package app;
-
+import Designpattern.KeyHandler;
+import Designpattern.*;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,6 +15,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Login extends JFrame {
 
@@ -79,6 +84,28 @@ public class Login extends JFrame {
 			    }
 			}
 		});
+		textField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				passwordField.requestFocusInWindow();
+			}
+		});
+		/*// RequestFocusCommand oluştur 
+		komut requestFocusCommand = new RequestFocusCommand(passwordField);
+		// ActionListener ekle 
+		textField.addActionListener(new ActionListener() {
+			@Override 
+			public void actionPerformed(ActionEvent e) { 
+				requestFocusCommand.execute(); 
+				} 
+			});*/
+		ButtonClickCommand enterKeyCommand = new ButtonClickCommand(passwordField, btnNewButton);
+        KeyHandler keyHandler = new KeyHandler(enterKeyCommand);
+        passwordField.addKeyListener(new KeyAdapter() {
+        	@Override 
+        	public void keyPressed(KeyEvent e) { 
+        		keyHandler.handleKey(e); }
+        });
+		
 		btnNewButton.setBounds(107, 268, 85, 21);
 		panel.add(btnNewButton);
 	}

@@ -1,5 +1,5 @@
 package app;
-
+import Designpattern.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -27,7 +27,7 @@ public class Azad extends JFrame {
     private final JButton btnsendmessage = new JButton("Gönder");
     private final JButton btnCoinGnder = new JButton("Coin Gönder");
     
-    /*
+    
      public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -41,7 +41,7 @@ public class Azad extends JFrame {
             }
         });
     }
-    */
+    
     public Azad(ImageIcon image, String username) {
         // Placeholder text handling
         inputMessage.setForeground(Color.gray);
@@ -63,11 +63,24 @@ public class Azad extends JFrame {
                 }
             }
         });
-        
+        Azad.this.setFocusable(true);
+        Azad.this.requestFocusInWindow(true);
         init(image, username);
+     
     }
-
-    private void init(ImageIcon image, String username) {
+    /*
+      private void addKeyListenerRecursively(Container container, KeyListener keyListener) { 
+    	container.addKeyListener(keyListener);
+    	for (Component component : container.getComponents()) {
+    		if (component instanceof Container) { 
+    			addKeyListenerRecursively((Container) component, keyListener); 
+    			} 
+    		else { component.addKeyListener(keyListener);
+    		}
+    	}
+    }
+    */
+	private void init(ImageIcon image, String username) {
         setTitle(String.format("P2P And Blockchain, %s!", username));
         setIconImage(image.getImage());
         setBackground(new Color(128, 128, 128));
@@ -83,6 +96,7 @@ public class Azad extends JFrame {
         sp.setRightComponent(initializeRightPanel(image));
 
         add(sp);
+        
     }
 
     private JScrollPane initializeLeftPanel(ImageIcon image) {
@@ -129,6 +143,7 @@ public class Azad extends JFrame {
     }
 
     private JPanel initializeRightPanel(ImageIcon image) {
+    	komut buttonClickCommand = new ButtonClickCommand(btnCoinGnder);
     	
     	RelativeLayout rightPanelLayout = new RelativeLayout(RelativeLayout.Y_AXIS);
         rightPanelLayout.setFill(true); // Fill components both horizontally AND vertically
@@ -170,10 +185,65 @@ public class Azad extends JFrame {
         btnsendmessage.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // action code
+            	inputMessage.setText("gönderildi");
             }
         });
+        // enter ctrl+enter fonksiyon ayrımı command pattern ile
+        ButtonClickCommand enterKeyCommand = new ButtonClickCommand(inputMessage, btnsendmessage);
+        KeyHandler keyHandler = new KeyHandler(enterKeyCommand);
+        inputMessage.addKeyListener(new KeyAdapter() {
+        	@Override 
+        	public void keyPressed(KeyEvent e) { 
+        		if (e.getKeyCode() == KeyEvent.VK_G && e.isControlDown()) { 
+        			buttonClickCommand.execute(); 
+        			}
+        		else {
+        			keyHandler.handleKey(e); 
+        		}
+        		}
+        });
+     // Frame'e KeyListener ekle 
+        Azad.this.addKeyListener(new KeyAdapter() { 
+        	@Override 
+        	public void keyPressed(KeyEvent e) { 
+        		if (e.getKeyCode() == KeyEvent.VK_G && e.isControlDown()) { 
+        			buttonClickCommand.execute(); 
+        			} 
+        		}
+        });
+        /*
+        // Frame içindeki bileşenlere KeyListener ekle 
+           addKeyListenerRecursively(this, new KeyAdapter() { 
+           	@Override 
+           	public void keyPressed(KeyEvent e) { 
+           		if (e.getKeyCode() == KeyEvent.VK_G && e.isControlDown()) { 
+           			buttonClickCommand.execute();
+           			}
+           		} 
+           	});
+         */
+        
+     // Frame içindeki bileşenlere KeyListener ekle addKeyListenerRecursively(this, new KeyAdapter() { @Override public void keyPressed(KeyEvent e) { if (e.getKeyCode() == KeyEvent.VK_G && e.isControlDown()) { buttonClickCommand.execute(); } }
+        // enter ctrl+enter fonksiyon ayrımı
+        /*inputMessage.addKeyListener(new KeyAdapter() {
+        	@Override
+        	public void keyPressed(KeyEvent e) {
+        		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+        			if (e.isControlDown()) {
+        				inputMessage.setText("ctrl+enter");
+        				//btnCoinGnder butonunun aksiyonu çalıştırılır
+        				for (ActionListener al:btnCoinGnder.getActionListeners()) {
+        					al.actionPerformed(new ActionEvent (this,ActionEvent.ACTION_PERFORMED,null));
+        				}
+        			}
+        			else {
+        				inputMessage.append("\n");
+        				e.consume(); //varsayılan enterı engeller
+        			}
+        		}
+        	}
+        });*/
         return rightPanel;
+    
     }
-    
-    
 }
