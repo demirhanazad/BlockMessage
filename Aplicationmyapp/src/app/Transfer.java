@@ -24,14 +24,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 
-public class transferframe extends JFrame {
+public class Transfer extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
 
 	
-	public transferframe(ImageIcon image) {
+	public Transfer(ImageIcon image) {
 		setTitle("Coin Transfer");
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 303, 199);
@@ -59,7 +59,7 @@ public class transferframe extends JFrame {
 					System.out.println("Geçersiz float değeri");
 				}
 				
-				transferframe.this.setVisible(false);
+				Transfer.this.setVisible(false);
 			}
 		});
 		btnNewButton.setBounds(96, 105, 85, 21);

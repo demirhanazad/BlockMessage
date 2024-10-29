@@ -1,7 +1,5 @@
 package Designpattern;
-import javax.swing.*;
 import javax.swing.text.*;
-import java.awt.event.*;
 
 public class FloatFilter extends DocumentFilter {
     @Override

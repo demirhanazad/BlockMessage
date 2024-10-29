@@ -19,7 +19,7 @@ public class Azad extends JFrame {
     private final JPanel leftPanel = new JPanel(); // Panel to display all members
     private final JPanel rightPanel = new JPanel(); // Panel with chat, message input and send button.
     private JScrollPane chatScrollPane = null;
-    private static transferframe transfer_frame;
+    private static Transfer transfer_frame;
     private final JTextArea inputMessage = new JTextArea();
     private final String PLACEHOLDER_TEXT = "Type your message here...";
     private static JList<String> list = new JList<>(new String[]{"Han", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir"});
@@ -133,7 +133,7 @@ public class Azad extends JFrame {
         menuItem1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                transfer_frame = new transferframe(image);
+                transfer_frame = new Transfer(image);
                 transfer_frame.setLocation(Azad.this.getLocation().x, Azad.this.getLocation().y);
                 transfer_frame.setVisible(true);
                 inputMessage.setText(list.getSelectedValue()+list.getSelectedIndex());
@@ -173,7 +173,7 @@ public class Azad extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 inputMessage.setText("merhaba");
-                transfer_frame = new transferframe(image);
+                transfer_frame = new Transfer(image);
                 int frameWidth = transfer_frame.getWidth();
                 int frameHeight = transfer_frame.getHeight();
                 int x = (Azad.this.getWidth() - frameWidth) / 2 + Azad.this.getX();
