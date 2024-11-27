@@ -20,6 +20,7 @@ public class Azad extends JFrame {
     private final JPanel rightPanel = new JPanel(); // Panel with chat, message input and send button.
     private JScrollPane chatScrollPane = null;
     private static Transfer transfer_frame;
+    private static BlockchainGUI Miningapp;
     private final JTextArea inputMessage = new JTextArea();
     private final String PLACEHOLDER_TEXT = "Type your message here...";
     private static JList<String> list = new JList<>(new String[]{"Han", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir","Han", "Demirhan", "Demir"});
@@ -99,48 +100,139 @@ public class Azad extends JFrame {
         
     }
 
-    private JScrollPane initializeLeftPanel(ImageIcon image) {
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        JScrollPane scrollpanel = new JScrollPane(leftPanel);
-        scrollpanel.setMinimumSize(new Dimension(200, 0)); // Same as initial divider location of the JSplitPane
-        scrollpanel.getVerticalScrollBar().setUnitIncrement(20);
-        list.setBackground(new Color(128, 128, 128));
-        list.setMaximumSize(new Dimension(Integer.MAX_VALUE, list.getPreferredSize().height)); // Maksimum genişliği ayarlayın
-        leftPanel.add(list);
-        JPopupMenu popupMenu = new JPopupMenu();
-        JMenuItem menuItem1 = new JMenuItem("Coin Gönder");
-        JMenuItem menuItem2 = new JMenuItem("Ara");
-        popupMenu.add(menuItem1);
-        popupMenu.add(menuItem2);
-        list.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                if (e.isPopupTrigger()) {
-                    int index = list.locationToIndex(e.getPoint());
-                    list.setSelectedIndex(index);
-                    list.ensureIndexIsVisible(index);
-                    popupMenu.show(list, e.getX(), e.getY());
-                }
-            }
+	private JScrollPane initializeLeftPanel(ImageIcon image) {
+	    leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-            public void mouseReleased(MouseEvent e) {
-                if (e.isPopupTrigger()) {
-                    mousePressed(e);
-                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
-                }
-            }
-        });
-        
-        menuItem1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                transfer_frame = new Transfer(image);
-                transfer_frame.setLocation(Azad.this.getLocation().x, Azad.this.getLocation().y);
-                transfer_frame.setVisible(true);
-                inputMessage.setText(list.getSelectedValue()+list.getSelectedIndex());
-            }
-        });
-        return scrollpanel;
-    }
+	    JMenuBar menuBar = new JMenuBar();
+	    JMenu menu = new JMenu("Menu");
+	    JMenu submenu = new JMenu("Submenu");
+	    JMenuItem miningitem = new JMenuItem("start mining");
+	    JMenuItem menuItem4 = new JMenuItem("Menu Item 2");
+	    JMenuItem submenuItem1 = new JMenuItem("Submenu Item 1");
+	    JMenuItem submenuItem2 = new JMenuItem("Submenu Item 2");
+	    menu.add(miningitem);
+	    menu.add(menuItem4);
+	    submenu.add(submenuItem1);
+	    submenu.add(submenuItem2);
+	    menu.add(submenu);
+	    menuBar.add(menu); 
+	    
+	    JPanel menuPanel = new JPanel();
+	    menuPanel.setLayout(new BorderLayout());
+	    menuPanel.add(menuBar, BorderLayout.PAGE_START);
+	    leftPanel.add(menuPanel);
+	    
+	    JScrollPane scrollpanel = new JScrollPane(leftPanel);
+	    scrollpanel.setMinimumSize(new Dimension(200, 0)); 
+	    scrollpanel.getVerticalScrollBar().setUnitIncrement(20);
+
+	    list.setBackground(new Color(128, 128, 128));
+	    list.setMaximumSize(new Dimension(Integer.MAX_VALUE, list.getPreferredSize().height));
+	    leftPanel.add(list);
+
+	    JPopupMenu popupMenu = new JPopupMenu();
+	    JMenuItem menuItem1 = new JMenuItem("Coin Gönder");
+	    JMenuItem menuItem2 = new JMenuItem("Ara");
+	    popupMenu.add(menuItem1);
+	    popupMenu.add(menuItem2);
+	    list.addMouseListener(new MouseAdapter() {
+	        public void mousePressed(MouseEvent e) {
+	            if (e.isPopupTrigger()) {
+	                int index = list.locationToIndex(e.getPoint());
+	                list.setSelectedIndex(index);
+	                list.ensureIndexIsVisible(index);
+	                popupMenu.show(list, e.getX(), e.getY());
+	            }
+	        }
+
+	        public void mouseReleased(MouseEvent e) {
+	            if (e.isPopupTrigger()) {
+	                mousePressed(e);
+	                popupMenu.show(e.getComponent(), e.getX(), e.getY());
+	            }
+	        }
+	    });
+
+	    menuItem1.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            transfer_frame = new Transfer(image);
+	            transfer_frame.setLocation(Azad.this.getLocation().x, Azad.this.getLocation().y);
+	            transfer_frame.setVisible(true);
+	            inputMessage.setText(list.getSelectedValue() + list.getSelectedIndex());
+	        }
+	    });
+
+	    miningitem.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            // Add your mining action here
+	        	Miningapp = new BlockchainGUI();
+                int frameWidth = Miningapp.getWidth();
+                int frameHeight = Miningapp.getHeight();
+                int x = (Azad.this.getWidth() - frameWidth) / 2 + Azad.this.getX();
+                int y = (Azad.this.getHeight() - frameHeight) / 2 + Azad.this.getY();
+                Miningapp.setLocation(x, y);
+                Miningapp.setVisible(true);
+	        }
+	    });
+
+	    menuItem4.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            // Add your action for Menu Item 2 here
+	            System.out.println("Menu Item 2 selected");
+	        }
+	    });
+
+	    submenuItem1.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            // Add your action for Submenu Item 1 here
+	            System.out.println("Submenu Item 1 selected");
+	        }
+	    });
+
+	    submenuItem2.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            // Add your action for Submenu Item 2 here
+	            System.out.println("Submenu Item 2 selected");
+	        }
+	    });
+
+	    list.addComponentListener(new ComponentAdapter() {
+	        @Override
+	        public void componentResized(ComponentEvent e) {
+	            int newWidth = list.getWidth() / 2;
+	            Dimension menuSize = new Dimension(newWidth, menu.getPreferredSize().height);
+	            menuBar.setPreferredSize(menuSize);
+	            menuBar.revalidate();
+	        }
+	    });
+
+	    leftPanel.addComponentListener(new ComponentAdapter() {
+	        @Override
+	        public void componentResized(ComponentEvent e) {
+	            int newWidth = leftPanel.getWidth();
+	            scrollpanel.setPreferredSize(new Dimension(newWidth, scrollpanel.getHeight()));
+	            for (Component comp : menuBar.getComponents()) {
+	                if (comp instanceof JMenu) {
+	                    ((JMenu) comp).setPreferredSize(new Dimension(newWidth / 2, comp.getPreferredSize().height));
+	                }
+	                for (Component menuComp : ((JMenu) comp).getMenuComponents()) {
+	                    if (menuComp instanceof JMenuItem) {
+	                        ((JMenuItem) menuComp).setPreferredSize(new Dimension(newWidth / 2, menuComp.getPreferredSize().height));
+	                    }
+	                }
+	            }
+	            leftPanel.revalidate();
+	        }
+	    });
+
+	    return scrollpanel;
+	}
+
 
     private JPanel initializeRightPanel(ImageIcon image) {
     	komut buttonClickCommand = new ButtonClickCommand(btnCoinGnder);
@@ -211,38 +303,7 @@ public class Azad extends JFrame {
         			} 
         		}
         });
-        /*
-        // Frame içindeki bileşenlere KeyListener ekle 
-           addKeyListenerRecursively(this, new KeyAdapter() { 
-           	@Override 
-           	public void keyPressed(KeyEvent e) { 
-           		if (e.getKeyCode() == KeyEvent.VK_G && e.isControlDown()) { 
-           			buttonClickCommand.execute();
-           			}
-           		} 
-           	});
-         */
-        
-     // Frame içindeki bileşenlere KeyListener ekle addKeyListenerRecursively(this, new KeyAdapter() { @Override public void keyPressed(KeyEvent e) { if (e.getKeyCode() == KeyEvent.VK_G && e.isControlDown()) { buttonClickCommand.execute(); } }
-        // enter ctrl+enter fonksiyon ayrımı
-        /*inputMessage.addKeyListener(new KeyAdapter() {
-        	@Override
-        	public void keyPressed(KeyEvent e) {
-        		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-        			if (e.isControlDown()) {
-        				inputMessage.setText("ctrl+enter");
-        				//btnCoinGnder butonunun aksiyonu çalıştırılır
-        				for (ActionListener al:btnCoinGnder.getActionListeners()) {
-        					al.actionPerformed(new ActionEvent (this,ActionEvent.ACTION_PERFORMED,null));
-        				}
-        			}
-        			else {
-        				inputMessage.append("\n");
-        				e.consume(); //varsayılan enterı engeller
-        			}
-        		}
-        	}
-        });*/
+ 
         return rightPanel;
     
     }

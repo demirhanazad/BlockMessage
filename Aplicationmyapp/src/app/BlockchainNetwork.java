@@ -5,17 +5,16 @@ import java.util.ArrayList;
 class BlockchainNetwork {
     private ArrayList<Node> nodes = new ArrayList<>();
 
-    public void addNode(Node node) {
+    public synchronized void addNode(Node node) {
         nodes.add(node);
         if (nodes.size() > 1) {
             node.connectToNode("localhost", 5000);
         } else {
             node.startServer();
         }
-        distributeBlockchainData();
     }
 
-    public void mineAndDistributeBlock(String data) {
+    public synchronized void mineAndDistributeBlock(String data) {
         Node minerNode = nodes.get(0);  // İlk düğümü madenci olarak seçelim
         int blockCount = minerNode.getTotalBlocksMined() + 1;
         int totalCoins = minerNode.getTotalCoins() + 50;
@@ -26,13 +25,22 @@ class BlockchainNetwork {
         distributeBlockchainData();
     }
 
-    private void distributeBlockchainData() {
+    private synchronized void distributeBlockchainData() {
         for (Node node : nodes) {
             ArrayList<Block> updatedBlockchain = node.getBlockchain().getBlockchain();
             for (Node otherNode : nodes) {
                 if (node != otherNode) {
                     otherNode.getBlockchain().getBlockchain().clear();
                     otherNode.getBlockchain().getBlockchain().addAll(updatedBlockchain);
+                }
+            }
+        }
+
+        // Tüm nodelara yeni blok bilgisini ilet
+        for (Node node : nodes) {
+            for (Node otherNode : nodes) {
+                if (node != otherNode) {
+                    otherNode.connectToNode("localhost", 5000);
                 }
             }
         }

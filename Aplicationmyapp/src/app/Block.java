@@ -14,7 +14,7 @@ class Block implements Serializable {
     private int blockCount; // Kazılan toplam blok sayısı
     private int totalCoins; // Çıkarılan toplam coin miktarı
 
-    // Constructor for Genesis block without blockCount and totalCoins
+    // Genesis bloğu için Constructor
     public Block(String data, String previousHash) {
         this.data = data;
         this.previousHash = previousHash;
@@ -25,7 +25,7 @@ class Block implements Serializable {
         this.totalCoins = this.reward;
     }
 
-    // Constructor for other blocks with blockCount and totalCoins
+    // Diğer bloklar için Constructor
     public Block(String data, String previousHash, int blockCount, int totalCoins) {
         this.data = data;
         this.previousHash = previousHash;
@@ -38,12 +38,12 @@ class Block implements Serializable {
 
     public String calculateHash() {
         String calculatedhash = applySha256(
-                previousHash + 
-                Long.toString(timeStamp) + 
-                Integer.toString(nonce) + 
-                data + 
-                Integer.toString(blockCount) + 
-                Integer.toString(totalCoins)
+                previousHash +
+                        Long.toString(timeStamp) +
+                        Integer.toString(nonce) +
+                        data +
+                        Integer.toString(blockCount) +
+                        Integer.toString(totalCoins)
         );
         return calculatedhash;
     }

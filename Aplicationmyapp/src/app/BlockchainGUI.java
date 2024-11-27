@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class BlockchainGUI extends JFrame {
     private BlockchainNetwork network;
@@ -11,16 +13,26 @@ public class BlockchainGUI extends JFrame {
     private JTextField dataField;
     private JLabel totalCoinsLabel;
     private JLabel totalBlocksLabel;
+    private static final int UPDATE_INTERVAL = 1000; // 1 saniyede bir güncelleme
+    private Node node;
 
     public BlockchainGUI() {
         network = new BlockchainNetwork();
-        Node node = new Node();
+        node = new Node();
         network.addNode(node);
 
         setTitle("Blockchain Uygulaması");
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
+
+        // Window closing event to stop server
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                node.stopServer();
+            }
+        });
 
         blockchainArea = new JTextArea();
         blockchainArea.setEditable(false);
@@ -40,7 +52,6 @@ public class BlockchainGUI extends JFrame {
                 String data = dataField.getText();
                 if (!data.isEmpty()) {
                     network.mineAndDistributeBlock(data);
-                    updateBlockchainDisplay();
                     dataField.setText("");
                 } else {
                     JOptionPane.showMessageDialog(null, "Lütfen blok verisini giriniz!");
@@ -62,7 +73,13 @@ public class BlockchainGUI extends JFrame {
 
         add(statusPanel, BorderLayout.NORTH);
 
-        updateBlockchainDisplay();
+        Timer timer = new Timer(UPDATE_INTERVAL, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateBlockchainDisplay();
+            }
+        });
+        timer.start();
     }
 
     private void updateBlockchainDisplay() {

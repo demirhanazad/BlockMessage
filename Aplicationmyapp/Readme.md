@@ -1,1 +1,1 @@
-<h3>The functionality for Ctrl+G and Ctrl+Enter has been added with this update. Now we can quickly log in and perform transfer tasks efficiently.</h3>
+<h3>Blockchain tabanlı bu mesajlaşma ve kripto para uygulamasında Command Pattern tasarımm deseni kullanılmıştır . böylelikler kodun daha okunabilir olamsı sağlanmıştır.</h3>

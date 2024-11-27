@@ -16,7 +16,7 @@ class Blockchain implements Serializable {
         return new Block("Genesis Block", "0");
     }
 
-    public void addBlock(Block block) {
+    public synchronized void addBlock(Block block) {
         if (blockchain.isEmpty() || blockchain.get(blockchain.size() - 1).hash.equals(block.previousHash)) {
             block.mineBlock(difficulty);
             blockchain.add(block);
@@ -24,11 +24,11 @@ class Blockchain implements Serializable {
         }
     }
 
-    private void saveBlockchain() {
+    private synchronized void saveBlockchain() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(BLOCKCHAIN_FILE))) {
             out.writeObject(blockchain);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error saving blockchain: " + e.getMessage());
         }
     }
 

@@ -6,8 +6,9 @@ import java.util.ArrayList;
 
 class Node {
     private Blockchain blockchain;
-    private ArrayList<Node> nodes = new ArrayList<>();
+    private ArrayList<String> connectedNodes = new ArrayList<>();
     private static final int SERVER_PORT = 5000;
+    private ServerSocket serverSocket;
 
     public Node() {
         this.blockchain = new Blockchain();
@@ -15,7 +16,8 @@ class Node {
 
     public void startServer() {
         new Thread(() -> {
-            try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT)) {
+            try {
+                serverSocket = new ServerSocket(SERVER_PORT);
                 System.out.println("Sunucu başlatıldı, port: " + SERVER_PORT);
 
                 while (true) {
@@ -28,6 +30,16 @@ class Node {
         }).start();
     }
 
+    public void stopServer() {
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void connectToNode(String host, int port) {
         new Thread(() -> {
             try (Socket socket = new Socket(host, port);
@@ -35,6 +47,9 @@ class Node {
                  ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
                 out.writeObject(blockchain);
                 blockchain = (Blockchain) in.readObject();
+                if (!connectedNodes.contains(host)) {
+                    connectedNodes.add(host);
+                }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -55,8 +70,8 @@ class Node {
     }
 
     private void broadcastBlockchain() {
-        for (Node node : nodes) {
-            try (Socket socket = new Socket("localhost", SERVER_PORT);
+        for (String host : connectedNodes) {
+            try (Socket socket = new Socket(host, SERVER_PORT);
                  ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
                 out.writeObject(blockchain);
             } catch (IOException e) {
@@ -90,7 +105,9 @@ class Node {
             try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                  ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
                 Blockchain receivedBlockchain = (Blockchain) in.readObject();
-                server.blockchain = receivedBlockchain;
+                synchronized (server.blockchain) {
+                    server.blockchain = receivedBlockchain;
+                }
                 out.writeObject(server.blockchain);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
